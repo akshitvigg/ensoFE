@@ -1,6 +1,7 @@
 import Preview from "@/components/ensopreview";
 import Footer from "@/components/footer";
 import Navbar from "@/components/navbar";
+import Link from "next/link";
 
 export default function Home() {
   return (
@@ -16,12 +17,17 @@ export default function Home() {
       </div>
 
       <div className=" flex space-x-6 justify-center mt-16">
-        <button className=" bg-white text-black py-3 px-4 rounded-md text-xl">
-          Get Started
-        </button>
-        <button className="py-3 px-4 rounded-md text-xl border border-zinc-800">
-          I already have an account
-        </button>
+        <Link href={"/signup"}>
+          {" "}
+          <button className=" bg-white hover:cursor-pointer text-black py-3 px-4 rounded-md text-xl">
+            Get Started
+          </button>
+        </Link>
+        <Link href={"/signin"}>
+          <button className="py-3 px-4 rounded-md text-xl hover:cursor-pointer border border-zinc-800">
+            I already have an account
+          </button>
+        </Link>
       </div>
 
       <Preview />
