@@ -2,7 +2,7 @@ import Link from "next/link";
 
 export default function Navbar() {
   return (
-    <div className=" bg-zinc-800 flex justify-between ">
+    <div className=" bg-zinc-900 flex justify-between ">
       <div className=" flex items-center space-x-2  ml-4">
         <img src="/enso.png" alt="ensologo" width={30} />
         <p className=" text-2xl py-4 ">Enso</p>
