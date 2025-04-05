@@ -15,28 +15,36 @@ export default function AuthComp({ isSignup }: { isSignup: boolean }) {
     const password = passInputRef.current?.value;
     const name = nameInputRef.current?.value;
 
-    const res = await axios.post(`${WEB_URL}/signup`, {
-      email,
-      password,
-      name,
-    });
+    try {
+      const res = await axios.post(`${WEB_URL}/signup`, {
+        email,
+        password,
+        name,
+      });
 
-    console.log(res.data);
-    alert("user signed up");
-    router.push("/signin");
+      console.log(res.data);
+      alert("user signed up");
+      router.push("/signin");
+    } catch (e) {
+      console.log(e);
+    }
   }
   async function signin() {
     const email = emailInputRef.current?.value;
     const password = passInputRef.current?.value;
 
-    const res = await axios.post(`${WEB_URL}/signin`, {
-      email,
-      password,
-    });
-    alert("user signed in" + res.data.token);
-    localStorage.setItem("token", res.data.token);
+    try {
+      const res = await axios.post(`${WEB_URL}/signin`, {
+        email,
+        password,
+      });
+      alert("user signed in" + res.data.token);
+      localStorage.setItem("token", res.data.token);
+      router.push("/createroom");
+    } catch (e) {
+      console.log(e);
+    }
   }
-
   return (
     <div className="  h-screen items-center justify-center flex">
       <div className="  w-96 border rounded-xl border-neutral-800">

@@ -18,13 +18,12 @@ export default function Home() {
 
       <div className=" flex space-x-6 justify-center mt-16">
         <Link href={"/signup"}>
-          {" "}
-          <button className=" bg-white hover:cursor-pointer text-black py-3 px-4 rounded-md text-xl">
+          <button className="  transition-all  hover:bg-zinc-300 duration-300 active:scale-95 bg-white hover:cursor-pointer text-black py-3 px-4 rounded-md text-xl">
             Get Started
           </button>
         </Link>
         <Link href={"/signin"}>
-          <button className="py-3 px-4 rounded-md text-xl hover:cursor-pointer border border-zinc-800">
+          <button className="py-3 hover:bg-zinc-800  transition-all duration-300 active:scale-95 px-4 rounded-md text-xl hover:cursor-pointer border border-zinc-800">
             I already have an account
           </button>
         </Link>

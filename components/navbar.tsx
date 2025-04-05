@@ -9,12 +9,12 @@ export default function Navbar() {
       </div>
       <div className=" m-4  space-x-3">
         <Link href={"/signin"}>
-          <button className=" border hover:cursor-pointer border-zinc-600 px-3 py-2 rounded-md">
+          <button className=" transition-all duration-300 active:scale-85 border hover:bg-zinc-800 hover:cursor-pointer  border-zinc-600 px-3 py-2 rounded-md">
             Sign In
           </button>
         </Link>
         <Link href={"/signup"}>
-          <button className=" bg-white hover:cursor-pointer text-black py-2 px-3 rounded-md ">
+          <button className=" bg-white  transition-all duration-300 active:scale-85 hover:bg-zinc-300 hover:cursor-pointer text-black py-2 px-3 rounded-md ">
             Sign Up
           </button>
         </Link>
