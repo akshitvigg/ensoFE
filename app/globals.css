@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import "loaders.css/loaders.min.css";
 
 :root {
   --background: #ffffff;

@@ -108,7 +108,7 @@ export default function AuthComp({ isSignup }: { isSignup: boolean }) {
             {/* btn */}
             <div className=" pb-7 flex justify-center">
               <button
-                className=" transition-all duration-200 text-md mt-7 py-2.5 px-32  border-[#262626] border  rounded-lg hover:bg-[#262626]  bg-[#18181b] text-white"
+                className=" transition-all duration-200 active:scale-95 text-md mt-7 py-2.5 px-32  border-[#262626] border  rounded-lg hover:bg-[#262626]  bg-[#18181b] text-white"
                 onClick={() => {
                   isSignup ? signup() : signin();
                 }}
