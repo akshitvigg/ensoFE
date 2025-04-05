@@ -2,6 +2,7 @@ import Preview from "@/components/ensopreview";
 import Footer from "@/components/footer";
 import Navbar from "@/components/navbar";
 import Link from "next/link";
+import { ToastContainer } from "react-toastify";
 
 export default function Home() {
   return (

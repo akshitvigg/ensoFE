@@ -4,6 +4,7 @@ import { WEB_URL } from "@/config";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
+import { toast } from "react-toastify";
 
 type choice = "create" | "join";
 
@@ -14,25 +15,30 @@ export default function CreateRoom() {
   const router = useRouter();
 
   async function getroomid() {
-    localStorage.getItem("token");
-    const res = await axios.post(
-      `${WEB_URL}/createroom`,
-      {
-        slug: roomnameRef.current?.value,
-      },
-      {
-        headers: {
-          Authorization: localStorage.getItem("token"),
+    try {
+      localStorage.getItem("token");
+      const res = await axios.post(
+        `${WEB_URL}/createroom`,
+        {
+          slug: roomnameRef.current?.value,
         },
-      }
-    );
+        {
+          headers: {
+            Authorization: localStorage.getItem("token"),
+          },
+        }
+      );
 
-    setroomid(res.data.roomid);
-    alert(res.data.roomid);
+      setroomid(res.data.roomid);
+      toast.success(`Room ${res.data.roomid} created successfully `);
+    } catch (e) {
+      toast.warning("Signup failed. Please try again later.");
+    }
   }
 
   function join() {
     router.push(`/canvas/${roomnameRef.current?.value}`);
+    toast.success(`Room ${roomnameRef.current?.value} joined successfully`);
   }
 
   useEffect(() => {

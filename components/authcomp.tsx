@@ -3,6 +3,7 @@ import { WEB_URL } from "@/config";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useRef } from "react";
+import { toast } from "react-toastify";
 
 export default function AuthComp({ isSignup }: { isSignup: boolean }) {
   const emailInputRef = useRef<HTMLInputElement>(null);
@@ -23,10 +24,12 @@ export default function AuthComp({ isSignup }: { isSignup: boolean }) {
       });
 
       console.log(res.data);
-      alert("user signed up");
+
+      toast.success("You have successfully signed up!");
       router.push("/signin");
     } catch (e) {
       console.log(e);
+      toast.warning("Signup failed. Please try again later.");
     }
   }
   async function signin() {
@@ -38,11 +41,13 @@ export default function AuthComp({ isSignup }: { isSignup: boolean }) {
         email,
         password,
       });
-      alert("user signed in" + res.data.token);
+
+      toast.success("You have successfully signed in!");
       localStorage.setItem("token", res.data.token);
       router.push("/createroom");
     } catch (e) {
       console.log(e);
+      toast.warning("Signin failed. Please try again later.");
     }
   }
   return (
