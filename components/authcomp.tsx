@@ -106,16 +106,25 @@ export default function AuthComp({ isSignup }: { isSignup: boolean }) {
               </div>
             )}
             {/* btn */}
-            <div className="pb-12 flex justify-center">
+            <div className=" pb-7 flex justify-center">
               <button
                 className=" transition-all duration-200 text-md mt-7 py-2.5 px-32  border-[#262626] border  rounded-lg hover:bg-[#262626]  bg-[#18181b] text-white"
                 onClick={() => {
                   isSignup ? signup() : signin();
                 }}
               >
-                {isSignup ? "Sign up" : "Sign in"}
+                {isSignup ? "Sign Up" : "Sign In"}
               </button>
             </div>
+            <p className="  pb-8 text-center">
+              {isSignup ? " Already a member?" : " Haven't registered yet?"}
+              <a
+                className=" text-zinc-400"
+                href={isSignup ? "/signin" : "/signup"}
+              >
+                {isSignup ? " Sign In" : " Sign Up"}
+              </a>
+            </p>
           </div>
         </div>
       </div>
