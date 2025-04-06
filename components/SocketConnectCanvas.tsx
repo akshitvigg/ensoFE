@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { Canvas } from "./realcanvas";
 import { WS_URL } from "@/config";
+import Loader from "./loader";
 
 export function SocketCanvas({ roomId }: { roomId: string }) {
   const [socket, setSocket] = useState<WebSocket | null>(null);
@@ -23,7 +24,11 @@ export function SocketCanvas({ roomId }: { roomId: string }) {
   }, []);
 
   if (!socket) {
-    return <div> connecting to server....</div>;
+    return (
+      <div className=" flex justify-center h-screen items-center">
+        <Loader size={50} />
+      </div>
+    );
   }
 
   return (

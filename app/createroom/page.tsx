@@ -1,5 +1,4 @@
 "use client";
-
 import Loader from "@/components/loader";
 import { WEB_URL } from "@/config";
 import axios from "axios";
@@ -31,7 +30,6 @@ export default function CreateRoom() {
           },
         }
       );
-
       setroomid(res.data.roomid);
       toast.success(`Room ${res.data.roomid} created successfully `);
     } catch (e) {
@@ -53,12 +51,12 @@ export default function CreateRoom() {
   }, [roomid, router]);
 
   return (
-    <div className=" items-center h-screen flex justify-center">
+    <div className="items-center h-screen flex justify-center">
       <div>
         {choice && (
-          <div>
+          <div className="flex flex-col md:flex-row items-center">
             <input
-              className="rounded-lg border outline-none  py-2 px-10 border-neutral-700 bg-[#27272a]"
+              className="rounded-lg border outline-none py-2 px-10 border-neutral-700 bg-[#27272a] w-full md:w-auto"
               ref={roomnameRef}
               type="text"
               placeholder={
@@ -67,19 +65,9 @@ export default function CreateRoom() {
             />
             <button
               onClick={choice === "create" ? getroomid : join}
-              className="transition-all active:scale-95 duration-200 text-md mt-7 py-2 px-10 ml-2  border-[#262626] border  rounded-lg hover:bg-[#262626]  bg-[#18181b]"
+              className="w-[120px] h-10 flex items-center justify-center transition-all active:scale-95 duration-200 text-md mt-4 md:mt-0 md:ml-2 border-[#262626] border rounded-lg hover:bg-[#262626] bg-[#18181b]"
             >
-              {choice === "create" ? (
-                loading ? (
-                  <Loader />
-                ) : (
-                  "create"
-                )
-              ) : loading ? (
-                <Loader />
-              ) : (
-                "Join"
-              )}
+              {loading ? <Loader /> : choice === "create" ? "Create" : "Join"}
             </button>
           </div>
         )}
@@ -90,7 +78,7 @@ export default function CreateRoom() {
                 onClick={() => {
                   setchoice("create");
                 }}
-                className=" transition-all duration-200 text-md mt-7 py-2 px-[110px]  border-[#262626] border  rounded-lg hover:bg-[#262626]  bg-[#18181b] "
+                className="transition-all duration-200 text-md mt-7 py-2 px-[110px] border-[#262626] border rounded-lg hover:bg-[#262626] bg-[#18181b]"
               >
                 Create room
               </button>
@@ -100,7 +88,7 @@ export default function CreateRoom() {
                 onClick={() => {
                   setchoice("join");
                 }}
-                className="  transition-all duration-200 text-md mt-7 py-2 px-[115px]  border-[#262626] border  rounded-lg hover:bg-[#262626]  bg-[#18181b] "
+                className="transition-all duration-200 text-md mt-7 py-2 px-[120px] border-[#262626] border rounded-lg hover:bg-[#262626] bg-[#18181b]"
               >
                 Join room
               </button>
