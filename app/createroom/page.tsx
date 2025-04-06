@@ -12,7 +12,7 @@ export default function CreateRoom() {
   const roomnameRef = useRef<HTMLInputElement>(null);
   const [roomid, setroomid] = useState("");
   const [choice, setchoice] = useState<choice>();
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState<boolean>(false);
   const router = useRouter();
 
   async function getroomid() {
@@ -64,7 +64,14 @@ export default function CreateRoom() {
               }
             />
             <button
-              onClick={choice === "create" ? getroomid : join}
+              onClick={() => {
+                const inputval = roomnameRef.current?.value.trim();
+                if (!inputval) {
+                  toast.warning("Please fill out the required fields");
+                  return;
+                }
+                choice === "create" ? getroomid() : join();
+              }}
               className="w-[120px] h-10 flex items-center justify-center transition-all active:scale-95 duration-200 text-md mt-4 md:mt-0 md:ml-2 border-[#262626] border rounded-lg hover:bg-[#262626] bg-[#18181b]"
             >
               {loading ? <Loader /> : choice === "create" ? "Create" : "Join"}

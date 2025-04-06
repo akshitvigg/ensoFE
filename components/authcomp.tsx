@@ -1,14 +1,17 @@
 "use client";
 import { WEB_URL } from "@/config";
 import axios from "axios";
+import { Flashlight } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { toast } from "react-toastify";
+import Loader from "./loader";
 
 export default function AuthComp({ isSignup }: { isSignup: boolean }) {
   const emailInputRef = useRef<HTMLInputElement>(null);
   const passInputRef = useRef<HTMLInputElement>(null);
   const nameInputRef = useRef<HTMLInputElement>(null);
+  const [loading, setLoading] = useState<boolean>(false);
   const router = useRouter();
 
   async function signup() {
@@ -17,6 +20,7 @@ export default function AuthComp({ isSignup }: { isSignup: boolean }) {
     const name = nameInputRef.current?.value;
 
     try {
+      setLoading(true);
       const res = await axios.post(`${WEB_URL}/signup`, {
         email,
         password,
@@ -30,6 +34,8 @@ export default function AuthComp({ isSignup }: { isSignup: boolean }) {
     } catch (e) {
       console.log(e);
       toast.warning("Signup failed. Please try again later.");
+    } finally {
+      setLoading(false);
     }
   }
   async function signin() {
@@ -37,6 +43,7 @@ export default function AuthComp({ isSignup }: { isSignup: boolean }) {
     const password = passInputRef.current?.value;
 
     try {
+      setLoading(true);
       const res = await axios.post(`${WEB_URL}/signin`, {
         email,
         password,
@@ -48,6 +55,8 @@ export default function AuthComp({ isSignup }: { isSignup: boolean }) {
     } catch (e) {
       console.log(e);
       toast.warning("Signin failed. Please try again later.");
+    } finally {
+      setLoading(false);
     }
   }
   return (
@@ -108,12 +117,20 @@ export default function AuthComp({ isSignup }: { isSignup: boolean }) {
             {/* btn */}
             <div className=" pb-7 flex justify-center">
               <button
-                className=" transition-all duration-200 active:scale-95 text-md mt-7 py-2.5 px-32  border-[#262626] border  rounded-lg hover:bg-[#262626]  bg-[#18181b] text-white"
+                className=" transition-all duration-200 active:scale-95 text-md mt-7 h-[45px] w-[290px]  border-[#262626] border  rounded-lg hover:bg-[#262626]  bg-[#18181b] text-white"
                 onClick={() => {
+                  const email = emailInputRef.current?.value.trim();
+                  const pass = passInputRef.current?.value.trim();
+                  const name = nameInputRef.current?.value.trim();
+
+                  if (!email || !pass || (isSignup && !name)) {
+                    toast.warning("Please fill out all the required fields");
+                    return;
+                  }
                   isSignup ? signup() : signin();
                 }}
               >
-                {isSignup ? "Sign Up" : "Sign In"}
+                {loading ? <Loader /> : isSignup ? "Sign Up" : "Sign In"}
               </button>
             </div>
             <p className="  pb-8 text-center">
