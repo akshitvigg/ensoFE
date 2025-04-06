@@ -61,7 +61,7 @@ export default function AuthComp({ isSignup }: { isSignup: boolean }) {
   }
   return (
     <div className="  h-screen items-center justify-center flex">
-      <div className="  w-96 border rounded-xl border-neutral-800">
+      <div className="  sm:w-[384px] w-[354px] border rounded-xl border-neutral-800">
         <div className=" flex justify-center">
           <div>
             {/* email */}

@@ -72,7 +72,7 @@ export default function CreateRoom() {
                 }
                 choice === "create" ? getroomid() : join();
               }}
-              className="w-[120px] h-10 flex items-center justify-center transition-all active:scale-95 duration-200 text-md mt-4 md:mt-0 md:ml-2 border-[#262626] border rounded-lg hover:bg-[#262626] bg-[#18181b]"
+              className="sm:w-[120px] sm:h-10 w-74 h-10 flex items-center justify-center transition-all active:scale-95 duration-200 text-md mt-4 md:mt-0 md:ml-2 border-[#262626] border rounded-lg hover:bg-[#262626] bg-[#18181b]"
             >
               {loading ? <Loader /> : choice === "create" ? "Create" : "Join"}
             </button>
