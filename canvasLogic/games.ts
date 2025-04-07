@@ -86,7 +86,7 @@ export class Game {
 
   async init() {
     this.existingShapes = await getExistingShapes(this.roomId);
-    // Add color property to existing shapes if they don't have it
+
     this.existingShapes = this.existingShapes.map((shape) => {
       if (!("color" in shape)) {
         //@ts-ignore
@@ -103,8 +103,15 @@ export class Game {
 
       if (message.type == "chat") {
         const parsedShape = JSON.parse(message.message);
-        this.existingShapes.push(parsedShape.shape);
-        this.clearCanvas();
+
+        const isOwnShape = this.existingShapes.some(
+          (shape) => JSON.stringify(shape) === JSON.stringify(parsedShape.shape)
+        );
+
+        if (!isOwnShape) {
+          this.existingShapes.push(parsedShape.shape);
+          this.clearCanvas();
+        }
       } else if (message.type == "move") {
         const parsedData = JSON.parse(message.message);
         const { index, newShape } = parsedData;
@@ -162,7 +169,6 @@ export class Game {
     });
   }
 
-  // Check if a point is inside a shape
   isPointInShape(x: number, y: number, shape: Shape): boolean {
     if (shape.type === "rect") {
       return (
@@ -176,7 +182,6 @@ export class Game {
       const dy = y - shape.centerY;
       return Math.sqrt(dx * dx + dy * dy) <= shape.radius;
     } else if (shape.type === "triangle") {
-      // Check if point is inside triangle using barycentric coordinates
       const a = { x: shape.x1, y: shape.y1 };
       const b = { x: shape.x2, y: shape.y2 };
       const c = { x: shape.x3, y: shape.y3 };
@@ -194,7 +199,6 @@ export class Game {
 
       return Math.abs(areaABC - (areaPBC + areaPAC + areaPAB)) < 1;
     } else if (shape.type === "line") {
-      // Check if point is near the line
       const lineLength = Math.sqrt(
         Math.pow(shape.x2 - shape.x1, 2) + Math.pow(shape.y2 - shape.y1, 2)
       );
@@ -211,7 +215,6 @@ export class Game {
 
       return distance < 5;
     } else if (shape.type === "pencil") {
-      // Check if point is near any line segment in the pencil path
       for (let i = 1; i < shape.points.length; i++) {
         const p1 = shape.points[i - 1];
         const p2 = shape.points[i];
@@ -235,7 +238,6 @@ export class Game {
     return false;
   }
 
-  // Find which shape was clicked
   findClickedShape(x: number, y: number): number {
     for (let i = this.existingShapes.length - 1; i >= 0; i--) {
       if (this.isPointInShape(x, y, this.existingShapes[i])) {
@@ -268,19 +270,16 @@ export class Game {
           this.dragOffsetX = this.startX - shape.centerX;
           this.dragOffsetY = this.startY - shape.centerY;
         } else if (shape.type === "triangle") {
-          // Use the midpoint of the triangle as reference
           const midX = (shape.x1 + shape.x2 + shape.x3) / 3;
           const midY = (shape.y1 + shape.y2 + shape.y3) / 3;
           this.dragOffsetX = this.startX - midX;
           this.dragOffsetY = this.startY - midY;
         } else if (shape.type === "line") {
-          // Use the midpoint of the line as reference
           const midX = (shape.x1 + shape.x2) / 2;
           const midY = (shape.y1 + shape.y2) / 2;
           this.dragOffsetX = this.startX - midX;
           this.dragOffsetY = this.startY - midY;
         } else if (shape.type === "pencil") {
-          // Use the first point of the pencil as reference
           this.dragOffsetX = this.startX - shape.points[0].x;
           this.dragOffsetY = this.startY - shape.points[0].y;
         }
@@ -305,7 +304,6 @@ export class Game {
     if (this.selectedTool === "move" && this.isDragging) {
       this.isDragging = false;
 
-      // Send the updated shape to other users
       if (this.selectedShape !== -1) {
         this.socket.send(
           JSON.stringify({
@@ -379,17 +377,27 @@ export class Game {
 
     if (this.selectedTool !== "pencil") {
       this.existingShapes.push(shape);
-    }
 
-    this.socket.send(
-      JSON.stringify({
-        type: "chat",
-        message: JSON.stringify({
-          shape,
-        }),
-        roomId: this.roomId,
-      })
-    );
+      this.socket.send(
+        JSON.stringify({
+          type: "chat",
+          message: JSON.stringify({
+            shape,
+          }),
+          roomId: this.roomId,
+        })
+      );
+    } else {
+      this.socket.send(
+        JSON.stringify({
+          type: "chat",
+          message: JSON.stringify({
+            shape,
+          }),
+          roomId: this.roomId,
+        })
+      );
+    }
   };
 
   mouseMoveHandler = (e: MouseEvent) => {
