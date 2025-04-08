@@ -51,7 +51,7 @@ export default function AuthComp({ isSignup }: { isSignup: boolean }) {
 
       toast.success("You have successfully signed in!");
       localStorage.setItem("token", res.data.token);
-      router.push("/createroom");
+      router.push("/roomsdashboard");
     } catch (e) {
       console.log(e);
       toast.warning("Signin failed. Please try again later.");
