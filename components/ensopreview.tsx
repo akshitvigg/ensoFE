@@ -1,9 +1,15 @@
 export default function Preview() {
   return (
-    <div className="flex ml-4 mr-4 sm:ml-0 sm:mr-0 mt-16 mb-16  justify-center">
-      <div className="flex justify-center w-[1300px]  bg-transparent">
-        <video src="/preview2.mp4" autoPlay muted loop playsInline></video>
-      </div>
+    <div className="relative w-full overflow-hidden bg-zinc-950 rounded-lg">
+      <video
+        src="/preview2.mp4"
+        autoPlay
+        muted
+        loop
+        playsInline
+        className="w-full object-cover rounded-lg"
+      ></video>
+      <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 to-transparent opacity-20"></div>
     </div>
   );
 }

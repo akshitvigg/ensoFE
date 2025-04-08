@@ -2,23 +2,35 @@ import Link from "next/link";
 
 export default function Navbar() {
   return (
-    <div className=" bg-zinc-900 flex justify-between ">
-      <div className=" flex items-center space-x-2  ml-4">
-        <img src="/enso.png" alt="ensologo" width={30} />
-        <p className=" text-2xl py-4 ">Enso</p>
+    <nav className="backdrop-blur-md bg-zinc-900/80 sticky top-0 z-50 border-b border-zinc-800">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6">
+        <div className="flex justify-between items-center py-4">
+          <div className="flex items-center space-x-3">
+            <img
+              src="/enso.png"
+              alt="Enso logo"
+              width={32}
+              height={32}
+              className="w-8 h-8"
+            />
+            <p className="text-2xl font-semibold bg-gradient-to-r from-white to-zinc-400 text-transparent bg-clip-text">
+              Enso
+            </p>
+          </div>
+          <div className="flex items-center space-x-4">
+            <Link href="/signin">
+              <button className="transition-all hover:cursor-pointer duration-300 active:scale-95 border hover:bg-zinc-800 border-zinc-700 px-4 py-2 rounded-lg text-sm font-medium">
+                Sign In
+              </button>
+            </Link>
+            <Link href="/signup">
+              <button className="bg-white hover:cursor-pointer transition-all duration-300 active:scale-95 hover:bg-zinc-200 text-black px-4 py-2 rounded-lg text-sm font-medium shadow-md">
+                Sign Up
+              </button>
+            </Link>
+          </div>
+        </div>
       </div>
-      <div className=" m-4  space-x-3">
-        <Link href={"/signin"}>
-          <button className=" transition-all duration-300 active:scale-85 border hover:bg-zinc-800 hover:cursor-pointer  border-zinc-600 px-3 py-2 rounded-md">
-            Sign In
-          </button>
-        </Link>
-        <Link href={"/signup"}>
-          <button className=" bg-white  transition-all duration-300 active:scale-85 hover:bg-zinc-300 hover:cursor-pointer text-black py-2 px-3 rounded-md ">
-            Sign Up
-          </button>
-        </Link>
-      </div>
-    </div>
+    </nav>
   );
 }
