@@ -2,7 +2,6 @@ import { WEB_URL } from "@/config";
 import axios from "axios";
 
 export async function getExistingShapes(roomId: string) {
-  // First get the base shapes from chat history
   const res = await axios.get(`${WEB_URL}/chats/${roomId}`, {
     headers: {
       Authorization: localStorage.getItem("token"),
@@ -15,7 +14,6 @@ export async function getExistingShapes(roomId: string) {
     return messageData.shape;
   });
 
-  // Then get shape movements
   try {
     const movementsRes = await axios.get(
       `${WEB_URL}/shapeMovements/${roomId}`,
@@ -28,7 +26,6 @@ export async function getExistingShapes(roomId: string) {
 
     const movements = movementsRes.data.movements;
 
-    // Apply movements to shapes
     if (movements && movements.length > 0) {
       movements.forEach((movement: any) => {
         const shapeIndex = movement.shapeIndex;
@@ -39,7 +36,6 @@ export async function getExistingShapes(roomId: string) {
     }
   } catch (error) {
     console.error("Error fetching shape movements:", error);
-    // Continue with just the base shapes if movements can't be fetched
   }
 
   return shapes;
