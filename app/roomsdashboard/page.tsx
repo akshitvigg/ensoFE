@@ -18,7 +18,6 @@ export default function Dashboard() {
   const roomNameRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
 
-  // Fetch rooms and user profile
   useEffect(() => {
     async function fetchData() {
       const token = localStorage.getItem("token");
@@ -43,7 +42,6 @@ export default function Dashboard() {
     fetchData();
   }, []);
 
-  // Redirect if room created
   useEffect(() => {
     if (roomId) {
       router.push(`/canvas/${roomId}`);
@@ -83,24 +81,20 @@ export default function Dashboard() {
     router.push(`/canvas/${slug}`);
   }
 
-  // Function to get the first letter of the user's name
   function getInitial() {
     return userData?.name?.charAt(0).toUpperCase() || "?";
   }
 
   return (
     <div className="min-h-screen bg-[#0f0f0f] text-white flex flex-col lg:flex-row gap-8 px-4 md:px-8 py-6 font-sans">
-      {/* Sidebar */}
       <aside className="w-full lg:w-1/4 bg-[#1c1c1c] p-6 rounded-2xl shadow-md border border-gray-800">
         <div className="flex items-center gap-4 mb-6">
           {userData ? (
             <div className="flex flex-col items-center">
-              {/* User Avatar */}
               <div className="w-16 h-16 rounded-full bg-indigo-600 flex items-center justify-center text-2xl font-semibold mb-4">
                 {getInitial()}
               </div>
 
-              {/* User Details */}
               <div className="w-full space-y-2 text-center">
                 <p className="text-xl font-medium">{userData.name}</p>
                 <p className="text-gray-400 text-sm">{userData.email}</p>
@@ -118,7 +112,6 @@ export default function Dashboard() {
           )}
         </div>
 
-        {/* Room Actions */}
         <div className="mt-6 border-t border-gray-800 pt-6">
           <h3 className="font-medium text-lg mb-4">Room Actions</h3>
           {choice ? (
@@ -173,7 +166,6 @@ export default function Dashboard() {
         </div>
       </aside>
 
-      {/* Room list */}
       <main className="flex-1 bg-[#1c1c1c] p-6 rounded-2xl shadow-md border border-gray-800">
         <h2 className="text-2xl font-semibold mb-6 border-b border-gray-700 pb-2">
           Your Rooms

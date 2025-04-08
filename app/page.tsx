@@ -2,14 +2,12 @@ import Preview from "@/components/ensopreview";
 import Footer from "@/components/footer";
 import Navbar from "@/components/navbar";
 import Link from "next/link";
-import { ToastContainer } from "react-toastify";
 
 export default function Home() {
   return (
     <div className="min-h-screen bg-zinc-900 font-[family-name:var(--font-geist-sans)]">
       <Navbar />
 
-      {/* Hero Section */}
       <div className="max-w-6xl mx-auto px-4 sm:px-6 md:px-8 pt-16 pb-8 md:pt-24 md:pb-12">
         <div className="text-center">
           <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold bg-gradient-to-r from-white to-zinc-400 text-transparent bg-clip-text tracking-tight">
@@ -35,7 +33,6 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Preview Section with Decorative Elements */}
       <div className="relative mt-10 mb-20">
         <div className="absolute inset-0 bg-gradient-to-b from-zinc-900 to-transparent h-20 z-10"></div>
         <div className="max-w-7xl mx-auto px-4 relative">
@@ -43,14 +40,12 @@ export default function Home() {
             <Preview />
           </div>
 
-          {/* Decorative elements */}
           <div className="absolute -top-10 -left-10 w-64 h-64 bg-purple-900 rounded-full opacity-10 blur-3xl"></div>
           <div className="absolute -bottom-20 -right-10 w-80 h-80 bg-blue-900 rounded-full opacity-10 blur-3xl"></div>
         </div>
         <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-zinc-900 to-transparent h-20 z-10"></div>
       </div>
 
-      {/* Features Section */}
       <div className="max-w-6xl mx-auto px-4 py-12 md:py-20">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div className="p-6 bg-zinc-800 rounded-xl border border-zinc-700 hover:border-zinc-600 transition-all">
@@ -128,7 +123,6 @@ export default function Home() {
         </div>
       </div>
 
-      {/* CTA Section */}
       <div className="max-w-4xl mx-auto px-4 py-16 text-center">
         <h2 className="text-3xl md:text-4xl font-bold mb-6">
           Ready to start collaborating?
