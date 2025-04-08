@@ -2,7 +2,7 @@ export default function Preview() {
   return (
     <div className="relative w-full overflow-hidden bg-zinc-950 rounded-lg">
       <video
-        src="/preview2.mp4"
+        src="/preview.mp4"
         autoPlay
         muted
         loop
