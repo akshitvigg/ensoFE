@@ -2,15 +2,16 @@ import Preview from "@/components/ensopreview";
 import Footer from "@/components/footer";
 import Navbar from "@/components/navbar";
 import Link from "next/link";
+import { ToastContainer } from "react-toastify";
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-zinc-900 font-[family-name:var(--font-geist-sans)]">
+    <div className="min-h-screen bg-gradient-to-b from-zinc-900 via-zinc-900 to-black font-[family-name:var(--font-geist-sans)]">
       <Navbar />
 
       <div className="max-w-6xl mx-auto px-4 sm:px-6 md:px-8 pt-16 pb-8 md:pt-24 md:pb-12">
         <div className="text-center">
-          <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold bg-gradient-to-r from-white to-zinc-400 text-transparent bg-clip-text tracking-tight">
+          <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold bg-gradient-to-r from-white via-white to-zinc-400 text-transparent bg-clip-text tracking-tight">
             Welcome to Enso
           </h1>
           <p className="mt-6 text-lg sm:text-xl md:text-2xl text-zinc-400 max-w-3xl mx-auto leading-relaxed">
@@ -21,12 +22,12 @@ export default function Home() {
 
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 mt-10 sm:mt-12">
           <Link href="/signup">
-            <button className="w-[280px] sm:w-auto hover:cursor-pointer transition-all hover:bg-white hover:bg-opacity-90 duration-300 active:scale-95 bg-white text-black font-medium py-3 px-8 rounded-lg text-lg shadow-lg shadow-white/10">
+            <button className="w-full sm:w-auto transition-all hover:bg-white hover:bg-opacity-90 duration-300 active:scale-95 bg-white text-black font-medium py-3 px-8 rounded-lg text-lg shadow-lg shadow-white/10">
               Get Started
             </button>
           </Link>
           <Link href="/signin">
-            <button className="w-full sm:w-auto py-3 px-8 hover:cursor-pointer hover:bg-zinc-800 transition-all duration-300 active:scale-95 rounded-lg text-lg font-medium border border-zinc-700 hover:border-zinc-600 shadow-lg shadow-black/20">
+            <button className="w-full sm:w-auto py-3 px-8 hover:bg-zinc-800 transition-all duration-300 active:scale-95 rounded-lg text-lg font-medium border border-zinc-700 hover:border-zinc-600 shadow-lg shadow-black/20">
               I already have an account
             </button>
           </Link>
@@ -34,21 +35,26 @@ export default function Home() {
       </div>
 
       <div className="relative mt-10 mb-20">
-        <div className="absolute inset-0 bg-gradient-to-b from-zinc-900 to-transparent h-20 z-10"></div>
         <div className="max-w-7xl mx-auto px-4 relative">
-          <div className="rounded-xl overflow-hidden border border-zinc-800 shadow-2xl shadow-purple-900/10 relative z-0">
-            <Preview />
+          <div className="p-6 bg-gradient-to-r from-purple-800/20 via-blue-800/20 to-purple-800/20 backdrop-blur-sm rounded-2xl border border-purple-500/30 shadow-2xl shadow-purple-900/20">
+            <div className="relative rounded-xl overflow-hidden border-2 border-white/20 shadow-inner">
+              <Preview />
+
+              <div className="absolute top-0 left-0 w-12 h-12 border-l-2 border-t-2 border-white/30 rounded-tl-lg"></div>
+              <div className="absolute top-0 right-0 w-12 h-12 border-r-2 border-t-2 border-white/30 rounded-tr-lg"></div>
+              <div className="absolute bottom-0 left-0 w-12 h-12 border-l-2 border-b-2 border-white/30 rounded-bl-lg"></div>
+              <div className="absolute bottom-0 right-0 w-12 h-12 border-r-2 border-b-2 border-white/30 rounded-br-lg"></div>
+            </div>
           </div>
 
-          <div className="absolute -top-10 -left-10 w-64 h-64 bg-purple-900 rounded-full opacity-10 blur-3xl"></div>
-          <div className="absolute -bottom-20 -right-10 w-80 h-80 bg-blue-900 rounded-full opacity-10 blur-3xl"></div>
+          <div className="absolute -top-20 -left-20 w-64 h-64 bg-purple-900 rounded-full opacity-10 blur-3xl"></div>
+          <div className="absolute -bottom-20 -right-20 w-80 h-80 bg-blue-900 rounded-full opacity-10 blur-3xl"></div>
         </div>
-        <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-zinc-900 to-transparent h-20 z-10"></div>
       </div>
 
       <div className="max-w-6xl mx-auto px-4 py-12 md:py-20">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          <div className="p-6 bg-zinc-800 rounded-xl border border-zinc-700 hover:border-zinc-600 transition-all">
+          <div className="p-6 bg-zinc-800/50 backdrop-blur-sm rounded-xl border border-zinc-700/50 hover:border-zinc-600/50 transition-all">
             <div className="w-12 h-12 bg-blue-500 bg-opacity-20 rounded-lg flex items-center justify-center mb-4">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -73,7 +79,7 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="p-6 bg-zinc-800 rounded-xl border border-zinc-700 hover:border-zinc-600 transition-all">
+          <div className="p-6 bg-zinc-800/50 backdrop-blur-sm rounded-xl border border-zinc-700/50 hover:border-zinc-600/50 transition-all">
             <div className="w-12 h-12 bg-purple-500 bg-opacity-20 rounded-lg flex items-center justify-center mb-4">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -98,7 +104,7 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="p-6 bg-zinc-800 rounded-xl border border-zinc-700 hover:border-zinc-600 transition-all">
+          <div className="p-6 bg-zinc-800/50 backdrop-blur-sm rounded-xl border border-zinc-700/50 hover:border-zinc-600/50 transition-all">
             <div className="w-12 h-12 bg-green-500 bg-opacity-20 rounded-lg flex items-center justify-center mb-4">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
