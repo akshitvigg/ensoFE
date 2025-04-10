@@ -35,15 +35,15 @@ export function Canvas({
   const [showColorPalette, setShowColorPalette] = useState<boolean>(false);
 
   const colors = [
-    "#FFFFFF", // White
-    "#FF3333", // Red
-    "#33FF33", // Green
-    "#3333FF", // Blue
-    "#FFFF33", // Yellow
-    "#FF33FF", // Magenta
-    "#33FFFF", // Cyan
-    "#FF9933", // Orange
-    "#9933FF", // Purple
+    "#FFFFFF",
+    "#FF3333",
+    "#33FF33",
+    "#3333FF",
+    "#FFFF33",
+    "#FF33FF",
+    "#33FFFF",
+    "#FF9933",
+    "#9933FF",
   ];
 
   useEffect(() => {

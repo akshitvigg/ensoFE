@@ -56,6 +56,86 @@ export class Game {
   private dragOffsetX: number = 0;
   private dragOffsetY: number = 0;
 
+  private zoomLevel: number = 1;
+  private offsetX: number = 0;
+  private offsetY: number = 0;
+  private isPanning: boolean = false;
+  private lastPanPoint = { x: 0, y: 0 };
+  private minZoom: number = 0.1;
+  private maxZoom: number = 10;
+  private addControlsLegend() {
+    const legend = document.createElement("div");
+    legend.style.position = "absolute";
+    legend.style.bottom = "10px";
+    legend.style.right = "10px";
+    legend.style.backgroundColor = "rgba(0, 0, 0, 0.7)";
+    legend.style.color = "white";
+    legend.style.padding = "10px";
+    legend.style.borderRadius = "5px";
+    legend.style.fontSize = "12px";
+    legend.style.userSelect = "none";
+    legend.style.zIndex = "1000";
+    legend.style.fontFamily = "Arial, sans-serif";
+    legend.style.boxShadow = "0 2px 5px rgba(0,0,0,0.3)";
+
+    legend.innerHTML = `
+      <div style="font-weight: bold; margin-bottom: 5px;">Canvas Controls</div>
+      <div style="display: flex; justify-content: space-between;">
+        <div style="flex: 1;">
+          <div>Mouse wheel: Zoom in/out</div>
+          <div>Space + drag: Pan canvas</div>
+        </div>
+     
+      </div>
+      <div style="text-align: right; margin-top: 5px; cursor: pointer; font-size: 10px;" id="hide-controls">Hide</div>
+    `;
+
+    this.canvas.parentElement?.appendChild(legend);
+
+    const hideButton = legend.querySelector("#hide-controls");
+    hideButton?.addEventListener("click", () => {
+      legend.style.display = "none";
+
+      localStorage.setItem("hideControlsLegend", "true");
+
+      this.addHelpButton();
+    });
+
+    if (localStorage.getItem("hideControlsLegend") === "true") {
+      legend.style.display = "none";
+      this.addHelpButton();
+    }
+  }
+
+  private addHelpButton() {
+    const helpButton = document.createElement("div");
+    helpButton.style.position = "absolute";
+    helpButton.style.bottom = "10px";
+    helpButton.style.right = "10px";
+    helpButton.style.backgroundColor = "rgba(0, 0, 0, 0.7)";
+    helpButton.style.color = "white";
+    helpButton.style.width = "24px";
+    helpButton.style.height = "24px";
+    helpButton.style.borderRadius = "50%";
+    helpButton.style.display = "flex";
+    helpButton.style.justifyContent = "center";
+    helpButton.style.alignItems = "center";
+    helpButton.style.cursor = "pointer";
+    helpButton.style.zIndex = "1000";
+    helpButton.style.fontSize = "14px";
+    helpButton.style.fontWeight = "bold";
+    helpButton.style.boxShadow = "0 2px 5px rgba(0,0,0,0.3)";
+    helpButton.innerHTML = "?";
+
+    helpButton.addEventListener("click", () => {
+      helpButton.remove();
+
+      localStorage.removeItem("hideControlsLegend");
+      this.addControlsLegend();
+    });
+
+    this.canvas.parentElement?.appendChild(helpButton);
+  }
   socket: WebSocket;
 
   constructor(canvas: HTMLCanvasElement, roomId: string, socket: WebSocket) {
@@ -68,12 +148,16 @@ export class Game {
     this.init();
     this.initHandlers();
     this.initMouseHandlers();
+    this.addControlsLegend();
   }
 
   destroy() {
     this.canvas.removeEventListener("mousedown", this.mouseDownHandler);
     this.canvas.removeEventListener("mouseup", this.mouseUpHandler);
     this.canvas.removeEventListener("mousemove", this.mouseMoveHandler);
+    this.canvas.removeEventListener("wheel", this.wheelHandler);
+    window.removeEventListener("keydown", this.keyDownHandler);
+    window.removeEventListener("keyup", this.keyUpHandler);
   }
 
   setTool(tool: ToolsType) {
@@ -94,6 +178,8 @@ export class Game {
       }
       return shape;
     });
+
+    this.applyTransform();
     this.clearCanvas();
   }
 
@@ -119,12 +205,37 @@ export class Game {
         this.clearCanvas();
       }
     };
+
+    this.canvas.addEventListener("wheel", this.wheelHandler);
+
+    window.addEventListener("keydown", this.keyDownHandler);
+    window.addEventListener("keyup", this.keyUpHandler);
+  }
+
+  applyTransform() {
+    this.ctx.setTransform(1, 0, 0, 1, 0, 0);
+    this.ctx.translate(this.offsetX, this.offsetY);
+    this.ctx.scale(this.zoomLevel, this.zoomLevel);
+  }
+
+  screenToCanvas(x: number, y: number): { x: number; y: number } {
+    return {
+      x: (x - this.offsetX) / this.zoomLevel,
+      y: (y - this.offsetY) / this.zoomLevel,
+    };
   }
 
   clearCanvas() {
+    this.ctx.save();
+
+    this.ctx.setTransform(1, 0, 0, 1, 0, 0);
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     this.ctx.fillStyle = "rgba(28, 28, 28)";
     this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+
+    this.ctx.restore();
+
+    // this.drawGrid();
 
     this.existingShapes.forEach((shape) => {
       this.ctx.strokeStyle = shape.color || "#FFFFFF";
@@ -169,7 +280,44 @@ export class Game {
     });
   }
 
+  drawGrid() {
+    const gridSize = 50;
+    const gridColor = "rgba(150, 150, 150, 0.2)";
+
+    const topLeft = this.screenToCanvas(0, 0);
+    const bottomRight = this.screenToCanvas(
+      this.canvas.width,
+      this.canvas.height
+    );
+
+    const startX = Math.floor(topLeft.x / gridSize) * gridSize;
+    const startY = Math.floor(topLeft.y / gridSize) * gridSize;
+    const endX = Math.ceil(bottomRight.x / gridSize) * gridSize;
+    const endY = Math.ceil(bottomRight.y / gridSize) * gridSize;
+
+    this.ctx.beginPath();
+    this.ctx.strokeStyle = gridColor;
+    this.ctx.lineWidth = 1 / this.zoomLevel;
+
+    for (let x = startX; x <= endX; x += gridSize) {
+      this.ctx.moveTo(x, startY);
+      this.ctx.lineTo(x, endY);
+    }
+
+    for (let y = startY; y <= endY; y += gridSize) {
+      this.ctx.moveTo(startX, y);
+      this.ctx.lineTo(endX, y);
+    }
+
+    this.ctx.stroke();
+    this.ctx.lineWidth = 1;
+  }
+
   isPointInShape(x: number, y: number, shape: Shape): boolean {
+    const canvasPoint = this.screenToCanvas(x, y);
+    x = canvasPoint.x;
+    y = canvasPoint.y;
+
     if (shape.type === "rect") {
       return (
         x >= shape.x &&
@@ -213,7 +361,7 @@ export class Game {
             shape.y2 * shape.x1
         ) / lineLength;
 
-      return distance < 5;
+      return distance < 5 / this.zoomLevel;
     } else if (shape.type === "pencil") {
       for (let i = 1; i < shape.points.length; i++) {
         const p1 = shape.points[i - 1];
@@ -230,7 +378,7 @@ export class Game {
             (p2.y - p1.y) * x - (p2.x - p1.x) * y + p2.x * p1.y - p2.y * p1.x
           ) / lineLength;
 
-        if (distance < 5) return true;
+        if (distance < 5 / this.zoomLevel) return true;
       }
       return false;
     }
@@ -247,15 +395,69 @@ export class Game {
     return -1;
   }
 
+  wheelHandler = (e: WheelEvent) => {
+    e.preventDefault();
+
+    const rect = this.canvas.getBoundingClientRect();
+    const mouseX = e.clientX - rect.left;
+    const mouseY = e.clientY - rect.top;
+
+    const zoomFactor = e.deltaY > 0 ? 0.9 : 1.1;
+
+    const newZoom = this.zoomLevel * zoomFactor;
+
+    if (newZoom < this.minZoom || newZoom > this.maxZoom) {
+      return;
+    }
+
+    const worldX = (mouseX - this.offsetX) / this.zoomLevel;
+    const worldY = (mouseY - this.offsetY) / this.zoomLevel;
+
+    this.zoomLevel = newZoom;
+
+    this.offsetX = mouseX - worldX * this.zoomLevel;
+    this.offsetY = mouseY - worldY * this.zoomLevel;
+
+    this.applyTransform();
+    this.clearCanvas();
+  };
+
+  keyDownHandler = (e: KeyboardEvent) => {
+    if (e.code === "Space" && !this.isPanning) {
+      this.isPanning = true;
+      this.canvas.style.cursor = "grab";
+    }
+  };
+
+  keyUpHandler = (e: KeyboardEvent) => {
+    if (e.code === "Space" && this.isPanning) {
+      this.isPanning = false;
+      this.canvas.style.cursor = "default";
+    }
+  };
+
   mouseDownHandler = (e: MouseEvent) => {
+    if (this.isPanning) {
+      this.clicked = true;
+      this.canvas.style.cursor = "grabbing";
+      const rect = this.canvas.getBoundingClientRect();
+      this.lastPanPoint.x = e.clientX - rect.left;
+      this.lastPanPoint.y = e.clientY - rect.top;
+      return;
+    }
+
     this.clicked = true;
 
     const rect = this.canvas.getBoundingClientRect();
-    this.startX = e.clientX - rect.left;
-    this.startY = e.clientY - rect.top;
+    const mouseX = e.clientX - rect.left;
+    const mouseY = e.clientY - rect.top;
+
+    const canvasPoint = this.screenToCanvas(mouseX, mouseY);
+    this.startX = canvasPoint.x;
+    this.startY = canvasPoint.y;
 
     if (this.selectedTool === "move") {
-      const shapeIndex = this.findClickedShape(this.startX, this.startY);
+      const shapeIndex = this.findClickedShape(mouseX, mouseY);
 
       if (shapeIndex !== -1) {
         this.selectedShape = shapeIndex;
@@ -295,11 +497,21 @@ export class Game {
   };
 
   mouseUpHandler = (e: MouseEvent) => {
+    if (this.isPanning) {
+      this.clicked = false;
+      this.canvas.style.cursor = "grab";
+      return;
+    }
+
     if (!this.clicked) return;
 
     const rect = this.canvas.getBoundingClientRect();
-    const endX = e.clientX - rect.left;
-    const endY = e.clientY - rect.top;
+    const mouseX = e.clientX - rect.left;
+    const mouseY = e.clientY - rect.top;
+
+    const canvasPoint = this.screenToCanvas(mouseX, mouseY);
+    const endX = canvasPoint.x;
+    const endY = canvasPoint.y;
 
     if (this.selectedTool === "move" && this.isDragging) {
       this.isDragging = false;
@@ -404,8 +616,27 @@ export class Game {
     if (!this.clicked) return;
 
     const rect = this.canvas.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
+    const mouseX = e.clientX - rect.left;
+    const mouseY = e.clientY - rect.top;
+
+    if (this.isPanning) {
+      const dx = mouseX - this.lastPanPoint.x;
+      const dy = mouseY - this.lastPanPoint.y;
+
+      this.offsetX += dx;
+      this.offsetY += dy;
+
+      this.lastPanPoint.x = mouseX;
+      this.lastPanPoint.y = mouseY;
+
+      this.applyTransform();
+      this.clearCanvas();
+      return;
+    }
+
+    const canvasPoint = this.screenToCanvas(mouseX, mouseY);
+    const x = canvasPoint.x;
+    const y = canvasPoint.y;
 
     if (
       this.selectedTool === "move" &&
@@ -510,6 +741,73 @@ export class Game {
       }
     }
   };
+
+  resetView() {
+    this.zoomLevel = 1;
+    this.offsetX = 0;
+    this.offsetY = 0;
+    this.applyTransform();
+    this.clearCanvas();
+  }
+
+  centerView() {
+    if (this.existingShapes.length === 0) {
+      this.resetView();
+      return;
+    }
+
+    let minX = Infinity;
+    let minY = Infinity;
+    let maxX = -Infinity;
+    let maxY = -Infinity;
+
+    this.existingShapes.forEach((shape) => {
+      if (shape.type === "rect") {
+        minX = Math.min(minX, shape.x);
+        minY = Math.min(minY, shape.y);
+        maxX = Math.max(maxX, shape.x + shape.width);
+        maxY = Math.max(maxY, shape.y + shape.height);
+      } else if (shape.type === "circle") {
+        minX = Math.min(minX, shape.centerX - shape.radius);
+        minY = Math.min(minY, shape.centerY - shape.radius);
+        maxX = Math.max(maxX, shape.centerX + shape.radius);
+        maxY = Math.max(maxY, shape.centerY + shape.radius);
+      } else if (shape.type === "triangle") {
+        minX = Math.min(minX, shape.x1, shape.x2, shape.x3);
+        minY = Math.min(minY, shape.y1, shape.y2, shape.y3);
+        maxX = Math.max(maxX, shape.x1, shape.x2, shape.x3);
+        maxY = Math.max(maxY, shape.y1, shape.y2, shape.y3);
+      } else if (shape.type === "line") {
+        minX = Math.min(minX, shape.x1, shape.x2);
+        minY = Math.min(minY, shape.y1, shape.y2);
+        maxX = Math.max(maxX, shape.x1, shape.x2);
+        maxY = Math.max(maxY, shape.y1, shape.y2);
+      } else if (shape.type === "pencil") {
+        shape.points.forEach((point) => {
+          minX = Math.min(minX, point.x);
+          minY = Math.min(minY, point.y);
+          maxX = Math.max(maxX, point.x);
+          maxY = Math.max(maxY, point.y);
+        });
+      }
+    });
+
+    const centerX = (minX + maxX) / 2;
+    const centerY = (minY + maxY) / 2;
+
+    const width = maxX - minX;
+    const height = maxY - minY;
+
+    const widthZoom = this.canvas.width / (width + 100);
+    const heightZoom = this.canvas.height / (height + 100);
+    this.zoomLevel = Math.min(widthZoom, heightZoom, 1);
+
+    this.offsetX = this.canvas.width / 2 - centerX * this.zoomLevel;
+    this.offsetY = this.canvas.height / 2 - centerY * this.zoomLevel;
+
+    this.applyTransform();
+    this.clearCanvas();
+  }
 
   initMouseHandlers() {
     this.canvas.addEventListener("mousedown", this.mouseDownHandler);
