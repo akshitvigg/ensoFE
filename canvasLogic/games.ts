@@ -1,4 +1,4 @@
-import { ToolsType, StrokeColor } from "../components/realcanvas";
+import { ToolsType } from "../components/realcanvas";
 import { getExistingShapes } from "./http";
 
 type Shape =
