@@ -19,14 +19,14 @@ export default function Home() {
           </p>
         </div>
 
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 mt-10 sm:mt-12">
+        <div className="flex flex-col sm:flex-row  items-center justify-center gap-4 sm:gap-6 mt-10 sm:mt-12">
           <Link href="/signup">
-            <button className="w-full sm:w-auto transition-all hover:bg-white hover:bg-opacity-90 duration-300 active:scale-95 bg-white text-black font-medium py-3 px-8 rounded-lg text-lg shadow-lg shadow-white/10">
+            <button className="w-full sm:w-auto hover:cursor-pointer transition-all hover:bg-white hover:bg-opacity-90 duration-300 active:scale-95 bg-white text-black font-medium py-3 px-8 rounded-lg text-lg shadow-lg shadow-white/10">
               Get Started
             </button>
           </Link>
           <Link href="/signin">
-            <button className="w-full sm:w-auto py-3 px-8 hover:bg-zinc-800 transition-all duration-300 active:scale-95 rounded-lg text-lg font-medium border border-zinc-700 hover:border-zinc-600 shadow-lg shadow-black/20">
+            <button className="w-full sm:w-auto py-3 px-8 hover:cursor-pointer hover:bg-zinc-800 transition-all duration-300 active:scale-95 rounded-lg text-lg font-medium border border-zinc-700 hover:border-zinc-600 shadow-lg shadow-black/20">
               I already have an account
             </button>
           </Link>
@@ -136,7 +136,7 @@ export default function Home() {
           Join thousands of teams who use Enso to bring their ideas to life.
         </p>
         <Link href="/signup">
-          <button className="transition-all hover:bg-white hover:bg-opacity-90 duration-300 active:scale-95 bg-white text-black font-medium py-3 px-8 rounded-lg text-lg">
+          <button className="transition-all hover:cursor-pointer hover:bg-white hover:bg-opacity-90 duration-300 active:scale-95 bg-white text-black font-medium py-3 px-8 rounded-lg text-lg">
             Create your free account
           </button>
         </Link>
