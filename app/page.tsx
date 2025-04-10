@@ -21,7 +21,7 @@ export default function Home() {
 
         <div className="flex flex-col sm:flex-row  items-center justify-center gap-4 sm:gap-6 mt-10 sm:mt-12">
           <Link href="/signup">
-            <button className="w-full sm:w-auto hover:cursor-pointer transition-all hover:bg-white hover:bg-opacity-90 duration-300 active:scale-95 bg-white text-black font-medium py-3 px-8 rounded-lg text-lg shadow-lg shadow-white/10">
+            <button className="w-[280px] sm:w-auto hover:cursor-pointer transition-all hover:bg-white hover:bg-opacity-90 duration-300 active:scale-95 bg-white text-black font-medium py-3 px-8 rounded-lg text-lg shadow-lg shadow-white/10">
               Get Started
             </button>
           </Link>
