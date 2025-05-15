@@ -6,6 +6,8 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { WEB_URL } from "@/config";
 import Loader from "@/components/loader";
+import "aos/dist/aos.css";
+import Aos from "aos";
 
 type Choice = "create" | "join";
 
@@ -17,6 +19,12 @@ export default function Dashboard() {
   const [loading, setLoading] = useState<boolean>(false);
   const roomNameRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
+  useEffect(() => {
+    Aos.init({
+      duration: 600,
+      once: true,
+    });
+  });
 
   useEffect(() => {
     async function fetchData() {
@@ -87,7 +95,10 @@ export default function Dashboard() {
 
   return (
     <div className="min-h-screen bg-[#0f0f0f] text-white flex flex-col lg:flex-row gap-8 px-4 md:px-8 py-6 font-sans">
-      <aside className="w-full lg:w-1/4 bg-[#1c1c1c] p-6 rounded-2xl shadow-md border border-gray-800">
+      <aside
+        data-aos="fade-right"
+        className="w-full lg:w-1/4 bg-[#1c1c1c] p-6 rounded-2xl shadow-md border border-gray-800"
+      >
         <div className="flex items-center gap-4 mb-6">
           {userData ? (
             <div className="flex flex-col items-center">
@@ -166,7 +177,10 @@ export default function Dashboard() {
         </div>
       </aside>
 
-      <main className="flex-1 bg-[#1c1c1c] p-6 rounded-2xl shadow-md border border-gray-800">
+      <main
+        data-aos="fade-left"
+        className="flex-1 bg-[#1c1c1c] p-6 rounded-2xl shadow-md border border-gray-800"
+      >
         <h2 className="text-2xl font-semibold mb-6 border-b border-gray-700 pb-2">
           Your Rooms
         </h2>

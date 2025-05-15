@@ -2,7 +2,10 @@ import Link from "next/link";
 
 export default function Navbar() {
   return (
-    <nav className="backdrop-blur-md bg-zinc-900/80 sticky top-0 z-50 border-b border-zinc-800">
+    <nav
+      data-aos="fade-down"
+      className="backdrop-blur-md bg-zinc-900/80 sticky top-0 z-50 border-b border-zinc-800"
+    >
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
         <div className="flex justify-between items-center py-4">
           <div className="flex items-center space-x-3">

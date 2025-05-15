@@ -3,11 +3,19 @@ import { WEB_URL } from "@/config";
 import axios from "axios";
 
 import { useRouter } from "next/navigation";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
 import Loader from "./loader";
+import AOS from "aos";
+import "aos/dist/aos.css";
 
 export default function AuthComp({ isSignup }: { isSignup: boolean }) {
+  useEffect(() => {
+    AOS.init({
+      duration: 600,
+      once: true,
+    });
+  }, []);
   const emailInputRef = useRef<HTMLInputElement>(null);
   const passInputRef = useRef<HTMLInputElement>(null);
   const nameInputRef = useRef<HTMLInputElement>(null);
@@ -61,7 +69,10 @@ export default function AuthComp({ isSignup }: { isSignup: boolean }) {
   }
   return (
     <div className="  h-screen items-center justify-center flex">
-      <div className="  sm:w-[384px] w-[354px] border rounded-xl border-neutral-800">
+      <div
+        data-aos="fade-up"
+        className="  sm:w-[384px] w-[354px] border rounded-xl border-neutral-800"
+      >
         <div className=" flex justify-center">
           <div>
             {/* email */}
