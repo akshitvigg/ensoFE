@@ -1,14 +1,28 @@
+"use client";
 import Preview from "@/components/ensopreview";
 import Footer from "@/components/footer";
 import Navbar from "@/components/navbar";
 import Link from "next/link";
+import "aos/dist/aos.css";
+import Aos from "aos";
+import { useEffect } from "react";
 
 export default function Home() {
+  useEffect(() => {
+    Aos.init({
+      duration: 500,
+      once: true,
+    });
+  });
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-zinc-900 via-zinc-900 to-black font-[family-name:var(--font-geist-sans)]">
       <Navbar />
 
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 md:px-8 pt-16 pb-8 md:pt-24 md:pb-12">
+      <div
+        data-aos="fade-up"
+        className="max-w-6xl mx-auto px-4 sm:px-6 md:px-8 pt-16 pb-8 md:pt-24 md:pb-12"
+      >
         <div className="text-center">
           <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold bg-gradient-to-r from-white via-white to-zinc-400 text-transparent bg-clip-text tracking-tight">
             Welcome to Enso
@@ -35,7 +49,10 @@ export default function Home() {
 
       <div className="relative mt-10 mb-20">
         <div className="max-w-7xl mx-auto px-4 relative">
-          <div className="p-6 bg-gradient-to-r from-purple-800/20 via-blue-800/20 to-purple-800/20 backdrop-blur-sm rounded-2xl border border-purple-500/30 shadow-2xl shadow-purple-900/20">
+          <div
+            data-aos="fade-up"
+            className="p-6 bg-gradient-to-r from-purple-800/20 via-blue-800/20 to-purple-800/20 backdrop-blur-sm rounded-2xl border border-purple-500/30 shadow-2xl shadow-purple-900/20"
+          >
             <div className="relative rounded-xl overflow-hidden border-2 border-white/20 shadow-inner">
               <Preview />
 
@@ -51,7 +68,7 @@ export default function Home() {
         </div>
       </div>
 
-      <div className="max-w-6xl mx-auto px-4 py-12 md:py-20">
+      <div data-aos="fade-up" className="max-w-6xl mx-auto px-4 py-12 md:py-20">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div className="p-6 bg-zinc-800/50 backdrop-blur-sm rounded-xl border border-zinc-700/50 hover:border-zinc-600/50 transition-all">
             <div className="w-12 h-12 bg-blue-500 bg-opacity-20 rounded-lg flex items-center justify-center mb-4">
@@ -128,7 +145,10 @@ export default function Home() {
         </div>
       </div>
 
-      <div className="max-w-4xl mx-auto px-4 py-16 text-center">
+      <div
+        data-aos="fade-left"
+        className="max-w-4xl mx-auto px-4 py-16 text-center"
+      >
         <h2 className="text-3xl md:text-4xl font-bold mb-6">
           Ready to start collaborating?
         </h2>
